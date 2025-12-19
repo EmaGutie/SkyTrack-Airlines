@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-0 fw-bold"><i class="fas fa-plane-arrival me-2"></i>Registrar Nuevo Vuelo</h4>
+            </div>
+            
+            <div class="card-body p-5">
+                <form method="POST" action="{{ url_for('vuelos.crear_vuelo') }}" class="row g-4">
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-muted small">CIUDAD DE ORIGEN</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-map-marker-alt text-primary"></i></span>
+                            <input type="text" name="origen" class="form-control bg-light border-start-0" placeholder="Ej: Mendoza" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-muted small">CIUDAD DE DESTINO</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-map-flags text-primary"></i></span>
+                            <input type="text" name="destino" class="form-control bg-light border-start-0" placeholder="Ej: Madrid" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-muted small">FECHA Y HORA PROGRAMADA</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="far fa-calendar-alt text-primary"></i></span>
+                            <input type="datetime-local" name="fecha_hora" class="form-control bg-light border-start-0" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-muted small">SELECCIONAR AERONAVE</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-plane text-primary"></i></span>
+                            <select name="id_avion" class="form-select bg-light border-start-0" required>
+                                <option value="" selected disabled>Elija un avión de la flota...</option>
+                                {% for avion in aviones %}
+                                    <option value="{{ avion.id }}">{{ avion.modelo }} - {{ avion.matricula }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-between mt-5 pt-3 border-top">
+                        <a href="{{ url_for('vuelos.listado_vuelos_frontend') }}" class="btn btn-outline-secondary px-4 fw-bold">CANCELAR</a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold shadow">GUARDAR VUELO</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

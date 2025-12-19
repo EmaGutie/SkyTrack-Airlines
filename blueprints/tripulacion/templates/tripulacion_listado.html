@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark">
+        <i class="fas fa-users-cog me-2 text-primary"></i>Gestión de Tripulación
+    </h2>
+    <div>
+        <a href="{{ url_for('tripulacion.crear_tripulante') }}" class="btn btn-primary shadow-sm fw-bold">
+            <i class="fas fa-plus-circle me-1"></i> Registrar Nuevo Tripulante
+        </a>
+        <a href="{{ url_for('vuelos.listado_vuelos_frontend') }}" class="btn btn-secondary shadow-sm fw-bold ms-2">
+            Volver a Vuelos
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="px-4 py-3 text-muted small text-uppercase">ID</th>
+                        <th class="py-3 text-muted small text-uppercase">Nombre Completo</th>
+                        <th class="py-3 text-muted small text-uppercase">Rol / Cargo</th>
+                        <th class="py-3 text-center text-muted small text-uppercase">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in tripulacion %}
+                    <tr>
+                        <td class="px-4 fw-bold">#{{ t.id }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center" 
+                                     style="width: 40px; height: 40px; border-radius: 50%;">
+                                    {{ t.nombre[0]|upper }}{{ t.apellido[0]|upper }}
+                                </div>
+                                <div class="ms-3">
+                                    <div class="fw-bold text-capitalize">{{ t.nombre }} {{ t.apellido }}</div>
+                                    <div class="text-muted small">ID Profesional: {{ t.id + 1000 }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {% if t.rol.lower() == 'piloto' %}
+                                <span class="badge rounded-pill bg-primary px-3"><i class="fas fa-star me-1"></i>Piloto</span>
+                            {% elif t.rol.lower() == 'copiloto' %}
+                                <span class="badge rounded-pill bg-info text-dark px-3">Copiloto</span>
+                            {% else %}
+                                <span class="badge rounded-pill bg-light text-dark border px-3">Auxiliar</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <a href="{{ url_for('tripulacion.editar_tripulante', id=t.id) }}" class="btn btn-sm btn-warning fw-bold">Editar</a>
+                                <form action="{{ url_for('tripulacion.baja_logica_tripulante', id=t.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger fw-bold" onclick="return confirm('¿Dar de baja?')">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

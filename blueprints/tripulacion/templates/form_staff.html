@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-0 fw-bold">
+                    <i class="fas fa-user-plus me-2"></i>
+                    {% if tripulante %} Editar Tripulante {% else %} Registrar Nuevo Tripulante {% endif %}
+                </h4>
+            </div>
+            
+            <div class="card-body p-4">
+                <form method="POST" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold small text-muted text-uppercase">Nombre</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="fas fa-user text-primary"></i></span>
+                            <input type="text" name="nombre" class="form-control bg-light border-start-0" 
+                                   placeholder="Ej: Lucas" value="{{ tripulante.nombre if tripulante else '' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold small text-muted text-uppercase">Apellido</label>
+                        <input type="text" name="apellido" class="form-control bg-light" 
+                               placeholder="Ej: Mandaf" value="{{ tripulante.apellido if tripulante else '' }}" required>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <label class="form-label fw-bold small text-muted text-uppercase">Rol / Cargo</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="fas fa-briefcase text-primary"></i></span>
+                            <select name="rol" class="form-select bg-light border-start-0" required>
+                                <option value="" disabled selected>Seleccione el cargo...</option>
+                                <option value="Piloto" {% if tripulante and tripulante.rol == 'Piloto' %}selected{% endif %}>Piloto</option>
+                                <option value="Copiloto" {% if tripulante and tripulante.rol == 'Copiloto' %}selected{% endif %}>Copiloto</option>
+                                <option value="Auxiliar" {% if tripulante and tripulante.rol == 'Auxiliar' %}selected{% endif %}>Auxiliar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-4 d-flex justify-content-between border-top pt-3">
+                        <a href="{{ url_for('tripulacion.listado_tripulacion') }}" class="btn btn-outline-secondary px-4 fw-bold">CANCELAR</a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold shadow">
+                            {% if tripulante %} ACTUALIZAR {% else %} GUARDAR TRIPULANTE {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-4 text-center">
+    <h2 class="fw-bold text-primary">
+        <i class="fas fa-desktop me-2"></i>Panel de Seguimiento de Vuelos
+    </h2>
+    <p class="text-muted">Control de operaciones y actualización de estados en tiempo real</p>
+</div>
+
+<div class="row">
+    {% for vuelo in vuelos %}
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0 h-100 card-vuelo">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <span class="badge bg-light text-primary fw-bold">Vuelo #{{ vuelo.id }}</span>
+                <i class="fas fa-plane"></i>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <h5 class="fw-bold mb-0">{{ vuelo.origen }}</h5>
+                    <i class="fas fa-chevron-down text-muted my-1"></i>
+                    <h5 class="fw-bold">{{ vuelo.destino }}</h5>
+                </div>
+                
+                <div class="d-flex justify-content-between small text-muted mb-3 border-top pt-2">
+                    <span><i class="far fa-clock me-1"></i> {{ vuelo.fecha_hora.strftime('%H:%M hs') }}</span>
+                    <span><i class="fas fa-chair me-1"></i> Cap: {{ vuelo.capacidad_total }}</span>
+                </div>
+
+                <div class="mb-4">
+                    <span class="badge w-100 p-2 shadow-sm
+                        {% if vuelo.estado == 'Programado' %} bg-info text-dark 
+                        {% elif vuelo.estado == 'En vuelo' %} bg-warning text-dark 
+                        {% elif vuelo.estado == 'Arribado' %} bg-success 
+                        {% else %} bg-secondary {% endif %}">
+                        <i class="fas fa-info-circle me-1"></i> {{ vuelo.estado|upper }}
+                    </span>
+                </div>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <form action="{{ url_for('vuelos.iniciar_vuelo', id=vuelo.id) }}" method="POST">
+                        <button type="submit" class="btn btn-outline-warning fw-bold px-4" 
+                                {% if vuelo.estado != 'programado' %}disabled{% endif %}>
+                            INICIAR
+                        </button>
+                    </form>
+
+                    <form action="{{ url_for('vuelos.arribar_vuelo', id=vuelo.id) }}" method="POST">
+                        <button type="submit" class="btn btn-outline-success fw-bold px-4" 
+                                {% if vuelo.estado != 'en vuelo' %}disabled{% endif %}>
+                            ARRIBAR
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <div class="card shadow-sm border-0 p-5">
+            <i class="fas fa-radar fa-3x text-light mb-3"></i>
+            <h4 class="text-muted">No hay vuelos activos para monitorear</h4>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

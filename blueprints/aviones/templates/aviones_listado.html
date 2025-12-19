@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark">
+        <i class="fas fa-plane-departure me-2 text-success"></i>Gestión de Aviones
+    </h2>
+    <div>
+        <a href="{{ url_for('aviones.crear_avion') }}" class="btn btn-success shadow-sm fw-bold">
+            <i class="fas fa-plus-circle me-1"></i> Agregar Nuevo Avión
+        </a>
+        <a href="{{ url_for('vuelos.listado_vuelos_frontend') }}" class="btn btn-secondary shadow-sm fw-bold ms-2">
+            Volver a Vuelos
+        </a>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="px-4 py-3 text-muted small text-uppercase">ID</th>
+                        <th class="py-3 text-muted small text-uppercase">Modelo</th>
+                        <th class="py-3 text-muted small text-uppercase">Capacidad</th>
+                        <th class="py-3 text-muted small text-uppercase">Estado</th>
+                        <th class="py-3 text-center text-muted small text-uppercase">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for avion in aviones %}
+                    <tr>
+                        <td class="px-4 fw-bold">#{{ avion.id }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-plane text-muted me-2"></i>
+                                <span>{{ avion.modelo }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">
+                                <i class="fas fa-users me-1 text-muted"></i>{{ avion.capacidad }} pasj.
+                            </span>
+                        </td>
+                        <td>
+                            {% if avion.estado == 'disponible' %}
+                                <span class="badge rounded-pill bg-success-subtle text-success border border-success px-3">
+                                    <i class="fas fa-check-circle me-1"></i>Disponible
+                                </span>
+                            {% elif avion.estado == 'en vuelo' %}
+                                <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary px-3">
+                                    <i class="fas fa-plane-departure me-1"></i>En Vuelo
+                                </span>
+                            {% else %}
+                                <span class="badge rounded-pill bg-warning-subtle text-warning border border-warning px-3">
+                                    <i class="fas fa-tools me-1"></i>Mantenimiento
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group shadow-sm">
+                                <a href="{{ url_for('aviones.editar_avion', id=avion.id) }}" class="btn btn-sm btn-warning text-dark fw-bold">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <form action="{{ url_for('aviones.baja_logica_avion', id=avion.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger fw-bold" onclick="return confirm('¿Dar de baja este avión?')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

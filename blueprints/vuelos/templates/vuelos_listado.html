@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row align-items-center mb-4">
+    <div class="col-md-6">
+        <h2 class="fw-bold text-primary">
+            <i class="fas fa-plane-departure me-2"></i>Gestión de Vuelos
+        </h2>
+    </div>
+    <div class="col-md-6 d-flex justify-content-end gap-2">
+        <a href="{{ url_for('tripulacion.listado_tripulacion') }}" class="btn btn-info btn-sm text-white shadow-sm">
+            <i class="fas fa-users me-1"></i> Tripulación
+        </a>
+        {% if current_user.rol == 'admin' %}
+            <a href="{{ url_for('aviones.listado_aviones') }}" class="btn btn-success btn-sm shadow-sm">
+                <i class="fas fa-shuttle-van me-1"></i> Aviones
+            </a>
+        {% endif %}
+        <a href="{{ url_for('vuelos.crear_vuelo') }}" class="btn btn-primary btn-sm shadow-sm">
+            <i class="fas fa-plus me-1"></i> Nuevo Vuelo
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 mb-4 overflow-hidden">
+    <div class="card-body bg-light">
+        <form method="GET" action="{{ url_for('vuelos.listado_vuelos_frontend') }}" class="row g-2">
+            <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white border-end-0"><i class="fas fa-map-marker-alt text-muted"></i></span>
+                    <input type="text" name="origen" class="form-control border-start-0" placeholder="Origen..." value="{{ filtro_origen }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white border-end-0"><i class="fas fa-map-flags text-muted"></i></span>
+                    <input type="text" name="destino" class="form-control border-start-0" placeholder="Destino..." value="{{ filtro_destino }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="estado" class="form-select form-select-sm">
+                    <option value="">Todos los estados</option>
+                    <option value="Programado">Programado</option>
+                    <option value="En vuelo">En vuelo</option>
+                    <option value="Arribado">Arribado</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">FILTRAR RESULTADOS</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow border-0">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th class="ps-4">Vuelo ID</th>
+                    <th>Origen / Destino</th>
+                    <th>Fecha y Hora</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vuelo in vuelos %}
+                <tr>
+                    <td class="ps-4 fw-bold text-muted">#{{ vuelo.id }}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold text-dark">{{ vuelo.origen }}</span>
+                            <i class="fas fa-long-arrow-alt-right mx-2 text-primary"></i>
+                            <span class="fw-bold text-dark">{{ vuelo.destino }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <small class="text-muted">
+                            <i class="far fa-calendar-alt me-1"></i> {{ vuelo.fecha_hora.strftime('%d/%m/%Y %H:%M') }}
+                        </small>
+                    </td>
+                    <td>
+                        <span class="badge rounded-pill 
+                            {% if vuelo.estado == 'Programado' %} bg-info text-dark 
+                            {% elif vuelo.estado == 'En vuelo' %} bg-warning text-dark 
+                            {% elif vuelo.estado == 'Arribado' %} bg-success 
+                            {% else %} bg-secondary {% endif %} p-2 px-3">
+                            <i class="fas fa-circle me-1 small"></i> {{ vuelo.estado }}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group">
+                            <a href="{{ url_for('vuelos.panel_estado') }}" class="btn btn-sm btn-outline-secondary" title="Ver en Panel">
+                                <i class="fas fa-desktop"></i>
+                            </a>
+                            <a href="{{ url_for('vuelos.ver_asignar_tripulacion', id_vuelo=vuelo.id) }}" class="btn btn-sm btn-outline-primary" title="Asignar Tripulación">
+                                <i class="fas fa-user-plus"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center py-5">
+                        <i class="fas fa-plane-slash fs-1 text-muted mb-3"></i>
+                        <p class="text-muted">No se encontraron vuelos registrados.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

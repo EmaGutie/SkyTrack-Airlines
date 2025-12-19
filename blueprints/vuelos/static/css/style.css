@@ -1,0 +1,66 @@
+:root {
+    --primary-blue: #003580;
+    --secondary-blue: #0056b3;
+    --accent-orange: #ff6d00;
+    --light-bg: #f5f7fa;
+}
+
+body {
+    background-color: var(--light-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    background-color: var(--primary-blue) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card-vuelo {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.card-vuelo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background-color: var(--secondary-blue);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+
+
+/* Estilo para el Login */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.btn-orange {
+    background-color: var(--accent-orange);
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+.btn-orange:hover {
+    background-color: #e65100;
+    color: white;
+}

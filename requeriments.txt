@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+PyMySQL
+Flask-Login
+cryptography
+email-validator

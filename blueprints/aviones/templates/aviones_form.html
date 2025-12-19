@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0 fw-bold">
+                    <i class="fas fa-plane-arrival me-2"></i>Registrar Nueva Aeronave
+                </h4>
+            </div>
+            
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('aviones.crear_avion') }}" class="row g-3">
+                    
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold small text-muted text-uppercase">Modelo del Avión</label>
+                        <input type="text" name="modelo" class="form-control bg-light" placeholder="Ej: Boeing 747" required>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold small text-muted text-uppercase">Capacidad de Pasajeros</label>
+                        <input type="number" name="capacidad" class="form-control bg-light" placeholder="Ej: 300" required>
+                    </div>
+
+                    <div class="col-12 mt-4 d-flex justify-content-between border-top pt-3">
+                        <a href="{{ url_for('aviones.listado_aviones') }}" class="btn btn-outline-secondary px-4 fw-bold">CANCELAR</a>
+                        <button type="submit" class="btn btn-success px-5 fw-bold shadow">GUARDAR AVIÓN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-center mt-3 text-muted small">
+            <i class="fas fa-info-circle me-1"></i> El estado inicial será <strong>disponible</strong>.
+        </div>
+    </div>
+</div>
+{% endblock %}
