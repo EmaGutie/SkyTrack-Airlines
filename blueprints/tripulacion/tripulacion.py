@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required
 from models import db, Tripulante 
 
-bp = Blueprint('tripulacion', __name__, template_folder='templates')
+# CORRECCIÓN: Eliminamos template_folder='templates' para usar la raíz global
+bp = Blueprint('tripulacion', __name__)
 
 # Roles de la tripulación (Definición global)
 ROLES_TRIPULACION = ['Piloto', 'Copiloto', 'Jefe de Cabina', 'Auxiliar de Vuelo', 'Técnico'] 
@@ -12,7 +13,8 @@ ROLES_TRIPULACION = ['Piloto', 'Copiloto', 'Jefe de Cabina', 'Auxiliar de Vuelo'
 @login_required
 def listado_tripulacion():
     tripulacion_db = Tripulante.query.filter_by(baja_logica=False).all()
-    return render_template('tripulacion_listado.html', tripulacion=tripulacion_db)
+    # CORRECCIÓN: Ruta al template global dentro de la subcarpeta
+    return render_template('tripulacion/tripulacion_listado.html', tripulacion=tripulacion_db)
 
 # ----------------- 2. CREAR TRIPULANTE -----------------
 @bp.route('/crear', methods=['GET', 'POST'])
@@ -37,8 +39,11 @@ def crear_tripulante():
         except Exception as e:
             db.session.rollback()
             flash(f'Error al crear el tripulante: {e}', 'danger')
-            return render_template('form_staff.html', roles=ROLES_TRIPULACION)
-    return render_template('form_staff.html', 
+            # CORRECCIÓN: Ruta al template global
+            return render_template('tripulacion/form_staff.html', roles=ROLES_TRIPULACION)
+            
+    # CORRECCIÓN: Ruta al template global
+    return render_template('tripulacion/form_staff.html', 
                            roles=ROLES_TRIPULACION, 
                            tripulante=None,
                            modo_edicion=False)
@@ -57,7 +62,8 @@ def editar_tripulante(id):
         
         return redirect(url_for('tripulacion.listado_tripulacion'))
     
-    return render_template('form_staff.html', tripulante=tripulante, roles=ROLES_TRIPULACION)
+    # CORRECCIÓN: Ruta al template global
+    return render_template('tripulacion/form_staff.html', tripulante=tripulante, roles=ROLES_TRIPULACION)
 
 
 # ----------------- 4. BAJA LÓGICA TRIPULANTE -----------------
